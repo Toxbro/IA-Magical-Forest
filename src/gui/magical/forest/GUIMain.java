@@ -5,6 +5,7 @@
  */
 package gui.magical.forest;
 
+import ia.magical.forest.environment.Map;
 import java.awt.Font;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,7 +15,7 @@ import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 /**
- *
+ * Classe principale de l'interface graphique qui permet d'initialiser les composants de l'interface ainsi que le graphique du niveau (forêt)
  * @author Maxime
  */
 public class GUIMain extends javax.swing.JFrame {
@@ -38,15 +39,22 @@ public class GUIMain extends javax.swing.JFrame {
      */
     public GUIMain() {
         initComponents();
+        console.setLineWrap(true);
         jtpScore.setOpaque(true);
         StyledDocument doc = jtpScore.getStyledDocument();		
         MutableAttributeSet right = new SimpleAttributeSet();		
         StyleConstants.setAlignment(right, StyleConstants.ALIGN_RIGHT);
         doc.setParagraphAttributes(0, 0, right, false);
         this.setExtendedState(this.MAXIMIZED_BOTH);
-        chargeLevel(3);
+        //chargeLevel(main.level, main.map);
+        Map map = new Map(4);
+        chargeLevel(4, map);
         //int[] monster = {0,2};
         //this.forest.killMonster(monster);
+//        for (int i=100000; i<101001; i++){
+//            setConsoleText(Integer.toString(i));
+//        }
+        
     }
 
     /**
@@ -63,6 +71,8 @@ public class GUIMain extends javax.swing.JFrame {
         jtpScore = new javax.swing.JTextPane();
         jScrollForest = new javax.swing.JScrollPane();
         forest = new gui.magical.forest.GridPanel();
+        jSPConsol = new javax.swing.JScrollPane();
+        console = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Magical Forest - Level X");
@@ -90,10 +100,15 @@ public class GUIMain extends javax.swing.JFrame {
         );
         forestLayout.setVerticalGroup(
             forestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
+            .addGap(0, 404, Short.MAX_VALUE)
         );
 
         jScrollForest.setViewportView(forest);
+
+        console.setEditable(false);
+        console.setColumns(20);
+        console.setRows(5);
+        jSPConsol.setViewportView(console);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -106,8 +121,11 @@ public class GUIMain extends javax.swing.JFrame {
                 .addComponent(jtpScore, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jbMove)
-                .addContainerGap(36, Short.MAX_VALUE))
-            .addComponent(jScrollForest)
+                .addContainerGap(420, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollForest)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSPConsol, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -118,7 +136,9 @@ public class GUIMain extends javax.swing.JFrame {
                     .addComponent(jbMove, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtpScore, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollForest, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollForest)
+                    .addComponent(jSPConsol)))
         );
 
         pack();
@@ -167,7 +187,9 @@ public class GUIMain extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea console;
     private gui.magical.forest.GridPanel forest;
+    private javax.swing.JScrollPane jSPConsol;
     private javax.swing.JScrollPane jScrollForest;
     private javax.swing.JButton jbMove;
     private javax.swing.JLabel jlScore;
@@ -186,7 +208,7 @@ public class GUIMain extends javax.swing.JFrame {
      */
     public void setLevel(int level) {
         this.level = level;
-            this.setTitle("Magical Forest - Level "+level);
+        this.setTitle("Magical Forest - Level "+level);
     }
     
         /**
@@ -205,26 +227,13 @@ public class GUIMain extends javax.swing.JFrame {
 //        this.main = main;
 //    }
     
-    public void chargeLevel(int level){
-        int[] gamer = new int[2];
-        gamer[0] = 0;
-        gamer[1] = 0;
-        int[] gamer2 = new int[2];
-        gamer2[0] = 0;
-        gamer2[1] = 1;
-        int[][] listItem = new int[level+2][level+2];
-        listItem[0][0] = 0;
-        listItem[0][1] = 2;
-        listItem[0][2] = 3;
-        listItem[1][0] = 1;
-        listItem[1][1] = 4;
-        listItem[1][2] = 2;
-        listItem[2][0] = 4;
-        listItem[2][1] = 5;
-        listItem[2][2] = 4;
-        
-        this.forest.initialize(this, level,listItem,gamer);
+    public void chargeLevel(int level, Map map){
+//        int[] gamer2 = new int[2];
+//        gamer2[0] = 0;
+//        gamer2[1] = 1;
+        this.forest.initialize(this, level, map);
         //this.forest.moveGamer(gamer2);
+        //this.forest.killMonster();
         setLevel(level);
         
     }
@@ -241,5 +250,9 @@ public class GUIMain extends javax.swing.JFrame {
      */
     public void setJtpScore(int jtpScore) {
         this.jtpScore.setText(Integer.toString(jtpScore));
+    }
+    
+    public void setConsoleText(String Text){
+        console.append(Text+"\n");
     }
 }
