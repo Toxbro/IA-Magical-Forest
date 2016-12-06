@@ -16,51 +16,39 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
- *
+ * Classe représentant une cellule exterieur (où le joueur ne peut pas aller) de la forêt (/la grille)
  * @author Maxime
  */
 public class CellForestPanel extends JPanel{
-
+    //la forêt / la grille
     private GridPanel gp;
-    private int coordX;
-    private int coordY;
-    
-    public CellForestPanel(GridPanel gp, int x, int y){
+    /**
+     * Constructeur de la classe qui permet de créer une cellule de type forêt (pour l'affiche d'un arbre sur l'interface grahpique)
+     * @param gp = la forêt (/la grille)
+     */
+    public CellForestPanel(GridPanel gp){
         this.gp = gp;
-        this.coordX=x;
-        this.coordY=y;
-        
         JPanel jpT = new JPanel();
-        JLabel tree = new JLabel(new ImageIcon(((new ImageIcon("ressources/tree.png")).getImage()).getScaledInstance(40, 40, java.awt.Image.SCALE_SMOOTH)));
+        JLabel tree = new JLabel(new ImageIcon(((new ImageIcon("ressources/tree.png")).getImage()).getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
         jpT.setOpaque(false);
         jpT.add(tree);
-        jpT.setVisible(true);
+        jpT.setVisible(true); 
         add(jpT);
         
     }
         
+    /**
+     * getter de la forêt / la grille
+     * @return la forêt / la grille
+     */
     public GridPanel getGp() {
         return gp;
     }
-
+    /**
+     * setter de la forêt / la grille
+     */
     public void setGp(GridPanel gp) {
         this.gp = gp;
-    }
-
-    public int getCoordX() {
-        return coordX;
-    }
-
-    public void setCoordX(int coordX) {
-        this.coordX = coordX;
-    }
-
-    public int getCoordY() {
-        return coordY;
-    }
-
-    public void setCoordY(int coordY) {
-        this.coordY = coordY;
     }
     
 }
