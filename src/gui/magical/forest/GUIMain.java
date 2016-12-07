@@ -227,7 +227,7 @@ public class GUIMain extends javax.swing.JFrame {
         }       
     }
     
-    public void delEntity(int row, int col, Entity entity){
+    public void removeEntity(int row, int col, Entity entity){
         if(entity == Entity.MONSTER){
             this.forest.delMonster(col, row);
         }
@@ -239,15 +239,15 @@ public class GUIMain extends javax.swing.JFrame {
     /**
      * @return the jtpScore
      */
-    public int getJtpScore() {
+    public int getScore() {
         return Integer.parseInt(jtpScore.getText());
     }
 
     /**
      * @param jtpScore the jtpScore to set
      */
-    public void setJtpScore(int jtpScore) {
-        this.jtpScore.setText(Integer.toString(jtpScore));
+    public void setScore(int score) {
+        this.jtpScore.setText(Integer.toString(score));
     }
     
     public void setConsoleText(String Text){
