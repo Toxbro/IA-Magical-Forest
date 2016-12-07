@@ -24,8 +24,6 @@ public class CellPanel extends JPanel{
      * Item = Stargate or Monster or Crevasse
      */
     private GridPanel gp;
-    private int nbPoop;
-    private int nbCloud;
     private JLabel item;
     /**
      * Constructeur de la classe qui permet de créer une cellule
@@ -35,10 +33,6 @@ public class CellPanel extends JPanel{
     public CellPanel(GridPanel gp){
         //la forêt / la grille
         this.gp = gp;
-        //le "nombre" de poop présent sur la cellule
-        this.nbPoop = 0;
-        //le "nombre" de cloud présent sur la cellule
-        this.nbCloud = 0;
         //layout de la cellule
         setLayout(new GridLayout(2,2));
         
@@ -87,46 +81,8 @@ public class CellPanel extends JPanel{
     }
 
     /**
-     * getter du nombre théorique de poop sur la cellule
-     * @return the nbPoop
-     */
-    public int getNbPoop() {
-        return nbPoop;
-    }
-
-    /**
-     * setter qui permet d'ajouter/de retirer une poop au nombre de poop de la cellule
-     * @param nbPoop the nbPoop to set
-     */
-    public void setNbPoop(int nbPoop) {
-        this.nbPoop = this.nbPoop+nbPoop;
-    }
-
-    /**
-     * getter du nombre théorique de cloud sur la cellule
-     * @return the nbCloud
-     */
-    public int getNbCloud() {
-        return nbCloud;
-    }
-
-    /**
-     * setter qui permet d'ajouter/de retirer un cloud au nombre de cloud de la cellule
-     * @param nbCloud the nbCloud to set
-     */
-    public void setNbCloud(int nbCloud) {
-        this.nbCloud =  this.nbCloud+nbCloud;
-    }
-
-    /**
-     * @return the item
-     */
-    public JLabel getItem() {
-        return item;
-    }
-
-    /**
-     * @param item the item to set
+     * Méthode qui permet d'initialiser l'image en fonction de l'item
+     * @param type : l'item de la case
      */
     public void setItem(int type) {
         switch(type){

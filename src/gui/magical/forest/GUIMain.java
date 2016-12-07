@@ -23,11 +23,6 @@ import javax.swing.text.StyledDocument;
 public class GUIMain extends javax.swing.JFrame {
     
     private int level;
-    private Controller ctrl;
-    /**
-     * Variable qui représente la classe principale du projet
-     * et qui permet de faire le lien avec les autres classes du projet
-     */
 
     /**
      * Creates new form GUIMain
@@ -41,14 +36,6 @@ public class GUIMain extends javax.swing.JFrame {
         StyleConstants.setAlignment(right, StyleConstants.ALIGN_RIGHT);
         doc.setParagraphAttributes(0, 0, right, false);
         this.setExtendedState(this.MAXIMIZED_BOTH);
-        //chargeLevel(main.level, main.map);
-        //Map map = new Map(4);
-        //chargeLevel(4, map);
-        //int[] monster = {0,2};
-        //this.forest.killMonster(monster);
-//        for (int i=100000; i<101001; i++){
-//            setConsoleText(Integer.toString(i));
-//        }
         
     }
 
@@ -198,19 +185,30 @@ public class GUIMain extends javax.swing.JFrame {
     }
 
     /**
-     * @param level the level to set
+     * Méthode qui permet de mettre à jour le titre de l'interface
+     * 
+     * @param level = le level
      */
     public void setLevel(int level) {
         this.level = level;
         this.setTitle("Magical Forest - Level "+level);
     }
-    
+    /**
+     * Méthode qui permet d'initialiser le graphisme d'une nouvelle forêt et
+     * de mettre à jour le niveau sur l'interface
+     * @param taille de la forêt
+     */
     public void chargeLevel(int taille){
         this.forest.initialize(this, taille);
         setLevel(taille-2);
         
     }
-    
+    /**
+     * Méthode qui permet d'ajouter un item à l'interface graphique
+     * @param row = position Y de l'item à ajouter
+     * @param col = position X de l'item à ajouter
+     * @param entity = enum de l'item à ajouter (PLAYER,PORTAL,...)
+     */
     public void putEntity(int row, int col, Entity entity){
         if(entity == Entity.PLAYER){
             this.forest.addGamer(col, row);
@@ -226,7 +224,12 @@ public class GUIMain extends javax.swing.JFrame {
             this.forest.addCloud(col, row);
         }       
     }
-    
+    /**
+     * Méthode qui permet d'enlever un item de l'interface graphique
+     * @param row = position Y de l'item à enlever
+     * @param col = position X de l'item à enlever
+     * @param entity = enum de l'item à enveler (MONSTER,SMELL)
+     */
     public void removeEntity(int row, int col, Entity entity){
         if(entity == Entity.MONSTER){
             this.forest.delMonster(col, row);
@@ -237,19 +240,24 @@ public class GUIMain extends javax.swing.JFrame {
     }
     
     /**
-     * @return the jtpScore
+     * Getter qui retourne le score du joueur
+     * @return le score du joueur
      */
     public int getScore() {
         return Integer.parseInt(jtpScore.getText());
     }
 
     /**
-     * @param jtpScore the jtpScore to set
+     * Setter qui permet de modifier le score du joueur
+     * @param score le score du joueur
      */
     public void setScore(int score) {
         this.jtpScore.setText(Integer.toString(score));
     }
-    
+    /**
+     * Méthode qui permet d'ajouter une ligne de texte dans la console de l'interface graphique
+     * @param Text 
+     */
     public void setConsoleText(String Text){
         console.append(Text+"\n");
     }

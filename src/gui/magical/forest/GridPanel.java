@@ -26,8 +26,7 @@ public class GridPanel extends JPanel{
     private int[][] listNumCell;
     private int actuColGamer, actuRowGamer;
     public void initialize(gui.magical.forest.GUIMain main, int tailleForet){
-        //taille de la grille = 2 + level + 2
-        /* 2 => première grille = 3x3 | deuxième grille = 4x4
+        /*taille de la grille = taille de la Foret + 2
         *  2 = le contour qui accueil les arbres
         */
         this.taille = tailleForet+2;
@@ -104,8 +103,8 @@ public class GridPanel extends JPanel{
     }
     /**
      * Méthode qui permet de déplacer le joueur sur l'interface graphique
-     * @param col = nouvelle position X du joueur
-     * @param row = nouvelle position Y du joueur
+     * @param col = nouvelle position X (la colonne) du joueur 
+     * @param row = nouvelle position Y (la ligne) du joueur
      */
     public void moveGamer(int col, int row){
         Component[] lc = this.getComponents();
@@ -118,7 +117,9 @@ public class GridPanel extends JPanel{
     }
     
     /**
-     * Méthode qui permet d'ajouter à l'interface graphique le gamer du niveau (généré par l'environemment)
+     * Méthode qui permet d'ajouter à l'interface graphique le gamer du niveau
+     * @param col = position X du joueur
+     * @param row = position Y du joueur
      */
     public void addGamer(int col, int row){
         Component[] lc = this.getComponents();
@@ -128,7 +129,10 @@ public class GridPanel extends JPanel{
         actuRowGamer = row;
     }
     /**
-     * Méthode qui permet d'ajouter à l'interface graphique le portail du niveau (généré par l'environemment)
+     * Méthode qui permet d'ajouter à l'interface graphique le portail du niveau
+     * 
+     * @param col = position X du portail
+     * @param row = position Y du portail
      */
     public void addStargate(int col, int row){
         Component[] lc = this.getComponents();
@@ -137,8 +141,9 @@ public class GridPanel extends JPanel{
         cpStargate.getComponent(2).setVisible(true);
     }  
     /**
-     * Méthode qui permet d'ajouter à l'interface graphique les monstres du niveau (générés par l'environemment)
-     * @param map = la map du niveau (générée par l'environemment)
+     * Méthode qui permet d'ajouter un monstre à l'interface graphique
+     * @param col = position X du monstre
+     * @param row = position Y du monstre
      */
     public void addMonster(int col, int row){
         Component[] lc = this.getComponents();
@@ -146,7 +151,11 @@ public class GridPanel extends JPanel{
         cpMonster.setItem(3);
         cpMonster.getComponent(2).setVisible(true);       
     }
-    
+    /**
+     * Méthode qui ajoute une case odorante à l'interface graphique
+     * @param col = position X de la case odorante
+     * @param row = position Y de la case odorante
+     */
     public void addPoop(int col, int row){
         Component[] lc = this.getComponents();
         CellPanel poop = (CellPanel) lc[this.listNumCell[col+1][row+1]];
@@ -154,7 +163,7 @@ public class GridPanel extends JPanel{
     }
     
     /**
-     * Méthode qui permet de retirer de l'interface graphique un monstre qui a été tué par le joueur
+     * Méthode qui permet de retirer un monstre de l'interface graphique (un monstre qui a été tué par le joueur)
      * @param col = position X du monstre
      * @param row = position Y du monstre
      */
@@ -163,15 +172,20 @@ public class GridPanel extends JPanel{
         CellPanel monster = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         monster.getComponent(2).setVisible(false);
     }
-    
+    /**
+     * Méthode qui permet d'enlever une case odorante de l'interface grahpique
+     * @param col = position X de la case odorante
+     * @param row = position Y de la case odorante
+     */
     public void delPoop(int col, int row){
         Component[] lc = this.getComponents();
         CellPanel poop = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         poop.getComponent(1).setVisible(false);
     }
     /**
-     * Méthode qui permet d'ajouter à l'interface graphique les crevasses du niveau (générées par l'environemment)
-     * @param map = la map du niveau (générée par l'environemment)
+     * Méthode qui permet d'ajouter une crevasse à l'interface graphique
+     * @param col = position X de la crevasse
+     * @param row = position Y de la crevasse
      */
     public void addCrevasse(int col, int row){
         Component[] lc = this.getComponents();
@@ -179,7 +193,11 @@ public class GridPanel extends JPanel{
         cpCrevasses.setItem(2);
         cpCrevasses.getComponent(2).setVisible(true);
     }
-    
+    /**
+     * Méthode qui permet d'ajouter une case venteuse à l'interface graphique
+     * @param col = position X de la case venteuse
+     * @param row = position Y de la case venteuse
+     */
     public void addCloud(int col, int row){
         Component[] lc = this.getComponents();
         CellPanel cloud = (CellPanel) lc[this.listNumCell[col+1][row+1]];
