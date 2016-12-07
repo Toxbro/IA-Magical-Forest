@@ -5,6 +5,7 @@
 */
 package ia.magical.forest.environment;
 
+import Main.Controller;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -13,6 +14,11 @@ import java.util.Random;
  * @author Thomas
  */
 public class Map {
+    
+    /**
+     * The controller of the program
+     */
+    private Controller main;
     
     /**
      * The size of the map
@@ -30,14 +36,14 @@ public class Map {
     //private Player player;
     
     /**
-     * The monster cell
+     * Monsters cells
      */
-    private Cell monsterCell;
+    private ArrayList<Cell> monsterCells;
     
     /**
      * The crevasse cell
      */
-    private Cell crevasseCell;
+    private ArrayList<Cell> crevasseCells;
     
     /**
      * Smelling cells
@@ -63,7 +69,8 @@ public class Map {
      * Constructor of the class
      * @param size Size of the map
      */
-    public Map(int size){
+    public Map(Controller controller, int size){
+        this.main = controller;
         this.size = size;
         cells = new ArrayList<>();
         for (int i = 0; i < size; i++) {
@@ -73,44 +80,74 @@ public class Map {
         }
         
         //Special cells initialization
-        monsterCell = getRandomCell();
-        crevasseCell = monsterCell;
-        while (crevasseCell == monsterCell) {
-            crevasseCell = getRandomCell();
+        crevasseCells = new ArrayList<>();
+        monsterCells = new ArrayList<>();
+        
+        int numberOfObstacle = (int)(size/3);
+        
+        for (int i = 0; i < numberOfObstacle; i++) {
+            Cell monsterCell;
+            monsterCell = getRandomCell();
+            while (monsterCells.contains(monsterCell) || crevasseCells.contains(monsterCell)) {
+                monsterCell = getRandomCell();
+            }
+            monsterCells.add(monsterCell);
+            Cell crevasseCell = monsterCell;
+            while (crevasseCell == monsterCell || monsterCells.contains(crevasseCell) || crevasseCells.contains(crevasseCell)) {
+                crevasseCell = getRandomCell();
+            }
         }
         
         //Setting boolean
-        smellingCells = getCloseCells(monsterCell);
-        windyCells = getCloseCells(crevasseCell);
+        for (Cell monsterCell : monsterCells) {
+            ArrayList<Cell> closeCells = getCloseCells(monsterCell);
+            for (Cell closeCell : closeCells) {
+                if (!smellingCells.contains(closeCell)) {
+                    smellingCells.add(closeCell);
+                }
+            }
+            main.putEntity(monsterCell.getRow(), monsterCell.getCol(), Entity.MONSTER);
+            monsterCell.setHasMonster(true);
+            monsterCell.setHasCrevasse(false);
+        }
+        for (Cell crevasseCell : crevasseCells) {
+            ArrayList<Cell> closeCells = getCloseCells(crevasseCell);
+            for (Cell closeCell : closeCells) {
+                if (!windyCells.contains(closeCell)) {
+                    windyCells.add(closeCell);
+                }
+            }
+            main.putEntity(crevasseCell.getRow(), crevasseCell.getCol(), Entity.CRACK);
+            crevasseCell.setHasMonster(false);
+            crevasseCell.setHasCrevasse(true);
+        }
         for (Cell cell : smellingCells) {
             cell.setIsSmelling(true);
             cell.setHasMonster(false);
             cell.setHasCrevasse(false);
+            main.putEntity(cell.getRow(), cell.getCol(), Entity.SMELL);
         }
         for (Cell cell : windyCells) {
             cell.setIsWindy(true);
             cell.setHasMonster(false);
             cell.setHasCrevasse(false);
+            main.putEntity(cell.getRow(), cell.getCol(), Entity.WIND);
         }
         
-        monsterCell.setHasMonster(true);
-        monsterCell.setHasCrevasse(false);
-        
-        crevasseCell.setHasMonster(false);
-        crevasseCell.setHasCrevasse(true);
-        
-        portalCell = monsterCell;
-        while ((portalCell == monsterCell) || (portalCell == crevasseCell)) {
+        portalCell = monsterCells.get(0);
+        while ((monsterCells.contains(portalCell)) || (monsterCells.contains(portalCell))) {
             portalCell = getRandomCell();
         }
         portalCell.setIsShiny(true);
+        main.putEntity(portalCell.getRow(), portalCell.getCol(), Entity.PORTAL);
         
-        playerCell = monsterCell;
-        while ((playerCell == monsterCell) || (playerCell == crevasseCell)) {
+        playerCell = monsterCells.get(0);
+        while ((monsterCells.contains(playerCell)) || (crevasseCells.contains(playerCell))) {
             playerCell = getRandomCell();
         }
-        System.out.println("Monster cell : "+monsterCell);
-        System.out.println("Crevasse cell : "+crevasseCell);
+        main.putEntity(playerCell.getRow(), playerCell.getCol(), Entity.PLAYER);
+        System.out.println("Monster cells : "+monsterCells);
+        System.out.println("Crevasse cells : "+crevasseCells);
         System.out.println("Portal cell : "+portalCell);
         System.out.println("Player cell : "+playerCell);
     }
@@ -205,29 +242,29 @@ public class Map {
     /**
      * @return the monsterCell
      */
-    public Cell getMonsterCell() {
-        return monsterCell;
+    public ArrayList<Cell> getMonsterCells() {
+        return monsterCells;
     }
     
     /**
      * @param monsterCell the monsterCell to set
      */
-    public void setMonsterCell(Cell monsterCell) {
-        this.monsterCell = monsterCell;
+    public void setMonsterCell(ArrayList<Cell> monsterCells) {
+        this.monsterCells = monsterCells;
     }
     
     /**
      * @return the crevasseCell
      */
-    public Cell getCrevasseCell() {
-        return crevasseCell;
+    public ArrayList<Cell> getCrevasseCells() {
+        return crevasseCells;
     }
     
     /**
      * @param crevasseCell the crevasseCell to set
      */
-    public void setCrevasseCell(Cell crevasseCell) {
-        this.crevasseCell = crevasseCell;
+    public void setCrevasseCell(ArrayList<Cell> crevasseCells) {
+        this.crevasseCells = crevasseCells;
     }
     
     /**
@@ -272,5 +309,46 @@ public class Map {
                 break;
         }
         return null;
+    }
+    
+    /**
+     * @return the playerCell
+     */
+    public Cell getPlayerCell() {
+        return playerCell;
+    }
+    
+    /**
+     * @param playerCell the playerCell to set
+     */
+    public void setPlayerCell(Cell playerCell) {
+        this.playerCell = playerCell;
+    }
+    
+    /**
+     * Method called when the player try to shoot a cell
+     * @param cell The targeted cell
+     */
+    public void removeMonster(Cell cell){
+        if (monsterCells.contains(cell)) {
+            monsterCells.remove(cell);
+            main.removeEntity(cell.getRow(), cell.getCol(), Entity.MONSTER);
+            ArrayList<Cell> closeCells = getCloseCells(cell);
+            for (Cell smellingCell : closeCells) {
+                ArrayList<Cell> closeCells2 = getCloseCells(smellingCell);
+                boolean cellToRemove = true;
+                //Checking if close cells of the smelling cell is another monster (could be)
+                for (Cell cell1 : closeCells2) {
+                    if (monsterCells.contains(cell1)) {
+                        cellToRemove = false;
+                    }
+                }
+                if (cellToRemove) {
+                    smellingCells.remove(smellingCell);
+                    main.removeEntity(smellingCell.getRow(), smellingCell.getCol(), Entity.SMELL);
+                }
+            }
+        }
+        
     }
 }
