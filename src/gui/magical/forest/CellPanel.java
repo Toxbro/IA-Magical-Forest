@@ -26,12 +26,13 @@ public class CellPanel extends JPanel{
     private GridPanel gp;
     private int nbPoop;
     private int nbCloud;
+    private JLabel item;
     /**
      * Constructeur de la classe qui permet de créer une cellule
      * @param gp = la forêt (/la grille)
      * @param type = représente l'item qui ira dans la sous case n°2 de la cellule
      */
-    public CellPanel(GridPanel gp, int type){
+    public CellPanel(GridPanel gp){
         //la forêt / la grille
         this.gp = gp;
         //le "nombre" de poop présent sur la cellule
@@ -50,22 +51,6 @@ public class CellPanel extends JPanel{
         JLabel poop = new JLabel(new ImageIcon(((new ImageIcon("ressources/poop.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         JLabel cloud = new JLabel(new ImageIcon(((new ImageIcon("ressources/cloud.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         JLabel item = new JLabel();
-        //l'item que va accueillir la cellule
-        switch(type){
-            case 0:
-                break;
-            case 1:
-                item = new JLabel(new ImageIcon(((new ImageIcon("ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-                break;
-            case 2:
-                item = new JLabel(new ImageIcon(((new ImageIcon("ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
-                break;
-            case 3:
-                item = new JLabel(new ImageIcon(((new ImageIcon("ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-                break;
-            default:
-                break;
-        }
         
         jpGamer.setOpaque(false);
         jpPoop.setOpaque(false);
@@ -131,5 +116,33 @@ public class CellPanel extends JPanel{
      */
     public void setNbCloud(int nbCloud) {
         this.nbCloud =  this.nbCloud+nbCloud;
+    }
+
+    /**
+     * @return the item
+     */
+    public JLabel getItem() {
+        return item;
+    }
+
+    /**
+     * @param item the item to set
+     */
+    public void setItem(int type) {
+        switch(type){
+            case 0:
+                break;
+            case 1:
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                break;
+            case 2:
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+                break;
+            case 3:
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -5,6 +5,8 @@
  */
 package gui.magical.forest;
 
+import Main.Controller;
+import ia.magical.forest.environment.Entity;
 import ia.magical.forest.environment.Map;
 import java.awt.Font;
 import java.util.logging.Level;
@@ -21,18 +23,11 @@ import javax.swing.text.StyledDocument;
 public class GUIMain extends javax.swing.JFrame {
     
     private int level;
+    private Controller ctrl;
     /**
      * Variable qui représente la classe principale du projet
      * et qui permet de faire le lien avec les autres classes du projet
      */
-    //private main.Main main;
-    /**
-     * Constructeur de la classe qui permet d'initialiser la variable main
-     * @param main Classe principale du projet
-     */
-//    public Main(main.Main main) {
-//        this.main = main;
-//    }
 
     /**
      * Creates new form GUIMain
@@ -47,8 +42,8 @@ public class GUIMain extends javax.swing.JFrame {
         doc.setParagraphAttributes(0, 0, right, false);
         this.setExtendedState(this.MAXIMIZED_BOTH);
         //chargeLevel(main.level, main.map);
-        Map map = new Map(4);
-        chargeLevel(4, map);
+        //Map map = new Map(4);
+        //chargeLevel(4, map);
         //int[] monster = {0,2};
         //this.forest.killMonster(monster);
 //        for (int i=100000; i<101001; i++){
@@ -180,7 +175,6 @@ public class GUIMain extends javax.swing.JFrame {
             public void run() {
                 GUIMain gui = new GUIMain();
                 gui.setVisible(true);
-                //gui.setJtpScore(100);
             }
         });
     }
@@ -211,33 +205,37 @@ public class GUIMain extends javax.swing.JFrame {
         this.setTitle("Magical Forest - Level "+level);
     }
     
-        /**
-     * Getter du main
-     * @return the main
-     */
-//    public main.Main getMain() {
-//        return main;
-//    }
-
-    /**
-     * Setter du main 
-     * @param main the main to set
-     */
-//    public void setMain(main.Main main) {
-//        this.main = main;
-//    }
-    
-    public void chargeLevel(int level, Map map){
-//        int[] gamer2 = new int[2];
-//        gamer2[0] = 0;
-//        gamer2[1] = 1;
-        this.forest.initialize(this, level, map);
-        //this.forest.moveGamer(gamer2);
-        //this.forest.killMonster();
-        setLevel(level);
+    public void chargeLevel(int taille){
+        this.forest.initialize(this, taille);
+        setLevel(taille-2);
         
     }
-
+    
+    public void putEntity(int row, int col, Entity entity){
+        if(entity == Entity.PLAYER){
+            this.forest.addGamer(col, row);
+        }else if(entity == Entity.PORTAL){
+            this.forest.addStargate(col, row);
+        }else if(entity == Entity.CRACK){
+            this.forest.addCrevasse(col, row);
+        }else if(entity == Entity.MONSTER){
+            this.forest.addMonster(col, row);
+        }else if(entity == Entity.SMELL){
+            this.forest.addPoop(col, row);
+        }else if(entity == Entity.WIND){
+            this.forest.addCloud(col, row);
+        }       
+    }
+    
+    public void delEntity(int row, int col, Entity entity){
+        if(entity == Entity.MONSTER){
+            this.forest.delMonster(col, row);
+        }
+        else if(entity == Entity.SMELL){
+            this.forest.delPoop(col, row);
+        }
+    }
+    
     /**
      * @return the jtpScore
      */
