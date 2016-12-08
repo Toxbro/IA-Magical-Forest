@@ -5,6 +5,8 @@
  */
 package gui.magical.forest;
 
+import Main.Controller;
+import ia.magical.forest.environment.Entity;
 import ia.magical.forest.environment.Map;
 import java.awt.Font;
 import java.util.logging.Level;
@@ -21,18 +23,6 @@ import javax.swing.text.StyledDocument;
 public class GUIMain extends javax.swing.JFrame {
     
     private int level;
-    /**
-     * Variable qui représente la classe principale du projet
-     * et qui permet de faire le lien avec les autres classes du projet
-     */
-    //private main.Main main;
-    /**
-     * Constructeur de la classe qui permet d'initialiser la variable main
-     * @param main Classe principale du projet
-     */
-//    public Main(main.Main main) {
-//        this.main = main;
-//    }
 
     /**
      * Creates new form GUIMain
@@ -46,14 +36,6 @@ public class GUIMain extends javax.swing.JFrame {
         StyleConstants.setAlignment(right, StyleConstants.ALIGN_RIGHT);
         doc.setParagraphAttributes(0, 0, right, false);
         this.setExtendedState(this.MAXIMIZED_BOTH);
-        //chargeLevel(main.level, main.map);
-        Map map = new Map(4);
-        chargeLevel(4, map);
-        //int[] monster = {0,2};
-        //this.forest.killMonster(monster);
-//        for (int i=100000; i<101001; i++){
-//            setConsoleText(Integer.toString(i));
-//        }
         
     }
 
@@ -180,7 +162,6 @@ public class GUIMain extends javax.swing.JFrame {
             public void run() {
                 GUIMain gui = new GUIMain();
                 gui.setVisible(true);
-                //gui.setJtpScore(100);
             }
         });
     }
@@ -204,54 +185,79 @@ public class GUIMain extends javax.swing.JFrame {
     }
 
     /**
-     * @param level the level to set
+     * Méthode qui permet de mettre à jour le titre de l'interface
+     * 
+     * @param level = le level
      */
     public void setLevel(int level) {
         this.level = level;
         this.setTitle("Magical Forest - Level "+level);
     }
-    
-        /**
-     * Getter du main
-     * @return the main
-     */
-//    public main.Main getMain() {
-//        return main;
-//    }
-
     /**
-     * Setter du main 
-     * @param main the main to set
+     * Méthode qui permet d'initialiser le graphisme d'une nouvelle forêt et
+     * de mettre à jour le niveau sur l'interface
+     * @param taille de la forêt
      */
-//    public void setMain(main.Main main) {
-//        this.main = main;
-//    }
-    
-    public void chargeLevel(int level, Map map){
-//        int[] gamer2 = new int[2];
-//        gamer2[0] = 0;
-//        gamer2[1] = 1;
-        this.forest.initialize(this, level, map);
-        //this.forest.moveGamer(gamer2);
-        //this.forest.killMonster();
-        setLevel(level);
+    public void chargeLevel(int taille){
+        this.forest.initialize(this, taille);
+        setLevel(taille-2);
         
     }
-
     /**
-     * @return the jtpScore
+     * Méthode qui permet d'ajouter un item à l'interface graphique
+     * @param row = position Y de l'item à ajouter
+     * @param col = position X de l'item à ajouter
+     * @param entity = enum de l'item à ajouter (PLAYER,PORTAL,...)
      */
-    public int getJtpScore() {
+    public void putEntity(int row, int col, Entity entity){
+        if(entity == Entity.PLAYER){
+            this.forest.addGamer(col, row);
+        }else if(entity == Entity.PORTAL){
+            this.forest.addStargate(col, row);
+        }else if(entity == Entity.CRACK){
+            this.forest.addCrevasse(col, row);
+        }else if(entity == Entity.MONSTER){
+            this.forest.addMonster(col, row);
+        }else if(entity == Entity.SMELL){
+            this.forest.addPoop(col, row);
+        }else if(entity == Entity.WIND){
+            this.forest.addCloud(col, row);
+        }       
+    }
+    /**
+     * Méthode qui permet d'enlever un item de l'interface graphique
+     * @param row = position Y de l'item à enlever
+     * @param col = position X de l'item à enlever
+     * @param entity = enum de l'item à enveler (MONSTER,SMELL)
+     */
+    public void removeEntity(int row, int col, Entity entity){
+        if(entity == Entity.MONSTER){
+            this.forest.delMonster(col, row);
+        }
+        else if(entity == Entity.SMELL){
+            this.forest.delPoop(col, row);
+        }
+    }
+    
+    /**
+     * Getter qui retourne le score du joueur
+     * @return le score du joueur
+     */
+    public int getScore() {
         return Integer.parseInt(jtpScore.getText());
     }
 
     /**
-     * @param jtpScore the jtpScore to set
+     * Setter qui permet de modifier le score du joueur
+     * @param score le score du joueur
      */
-    public void setJtpScore(int jtpScore) {
-        this.jtpScore.setText(Integer.toString(jtpScore));
+    public void setScore(int score) {
+        this.jtpScore.setText(Integer.toString(score));
     }
-    
+    /**
+     * Méthode qui permet d'ajouter une ligne de texte dans la console de l'interface graphique
+     * @param Text 
+     */
     public void setConsoleText(String Text){
         console.append(Text+"\n");
     }
