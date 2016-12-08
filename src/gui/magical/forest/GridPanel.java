@@ -42,9 +42,9 @@ public class GridPanel extends JPanel{
                 boolean isCrevasse = false;
                 boolean isMonster = false;
                 int type = 0;
-                if(col == map.getPortalCell().getCol()+1 && row == map.getPortalCell().getRow()+1){
-                    isStargate = true;
-                }
+//                if(col == map.getPortalCell().getCol()+1 && row == map.getPortalCell().getRow()+1){
+//                    isStargate = true;
+//                }
 //                for(int i=0; i<map.getCrevasseCells().size(); i++){
 //                    if(col == map.getCrevasseCells().get(i).getCol()+1 && row == map.getCrevasseCells().get(i).getRow()+1){
 //                        isCrevasse = true;
@@ -170,9 +170,9 @@ public class GridPanel extends JPanel{
         //on ajoute +1,+1 aux coordonnées du gamer pour prendre en compte la fôret
         //etape 3 : on rend le gamer visible
         Component[] lc = this.getComponents();
-        CellPanel cpGame = (CellPanel) lc[listNumCell[map.getPlayerCell().getCol()+1][map.getPlayerCell().getRow()+1]];
+        //CellPanel cpGame = (CellPanel) lc[listNumCell[map.getPlayerCell().getCol()+1][map.getPlayerCell().getRow()+1]];
         if(!isGamer){
-            cpGame.getComponent(0).setVisible(true);
+            //cpGame.getComponent(0).setVisible(true);
             isGamer = true;
         }
     }
@@ -206,8 +206,8 @@ public class GridPanel extends JPanel{
      */
     public void addStargate(Map map){
         Component[] lc = this.getComponents();
-        CellPanel cpStargate = (CellPanel) lc[listNumCell[map.getPortalCell().getCol()+1][map.getPortalCell().getRow()+1]];
-        cpStargate.getComponent(2).setVisible(true);
+        //CellPanel cpStargate = (CellPanel) lc[listNumCell[map.getPortalCell().getCol()+1][map.getPortalCell().getRow()+1]];
+        //cpStargate.getComponent(2).setVisible(true);
     }
     /**
      * Méthode qui permet d'ajouter à l'interface graphique les cases qui sentent mauvaises de la position d'un monstre passé en paramètre

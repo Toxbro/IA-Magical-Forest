@@ -273,4 +273,47 @@ public class Map {
         }
         return null;
     }
+    
+    /**
+     * Method called to get the direction from a cell to another
+     * @param start Cell starting from
+     * @param end Targeted cell
+     * @return The direction if possible, null else
+     */
+    public Direction getDirectionFromCell(Cell start, Cell end){
+        Direction direction;
+        int posOfCellStart = getCells().indexOf(start);
+        int posOfCellEnd = getCells().indexOf(end);
+        int dif = posOfCellEnd - posOfCellStart;
+        if ((dif == -1) && (start.getRow() == end.getRow())) {
+            direction = Direction.LEFT;
+        }
+        else if ((dif == 1) && (start.getRow() == end.getRow())){
+            direction = Direction.RIGHT;
+        }
+        else if (dif == size){
+            direction = Direction.DOWN;
+        }
+        else if (dif == -size){
+            direction = Direction.UP;
+        }
+        else{
+            direction = null;
+        }
+        return direction;
+    }
+
+    /**
+     * @return the playerCell
+     */
+    public Cell getPlayerCell() {
+        return playerCell;
+    }
+
+    /**
+     * @return the portalCell
+     */
+    public Cell getPortalCell() {
+        return portalCell;
+    }
 }

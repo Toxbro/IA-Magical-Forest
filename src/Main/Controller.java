@@ -6,6 +6,7 @@
 package Main;
 
 import gui.magical.forest.GUIMain;
+import ia.magical.forest.environment.Direction;
 import ia.magical.forest.environment.Entity;
 import ia.magical.forest.environment.Map;
 import player.Player;
@@ -20,21 +21,46 @@ public class Controller {
     private Player player;
     private GUIMain gui;
     
-    public void main(String[] args){
+    public Controller(){
         map = new Map(3);
-        player = new Player(map);
+        player = new Player(this);
         gui = new GUIMain();
     }
     
+    public static void main(String[] args){
+        Controller controller = new Controller();
+    }
+    
     public void putEntity(int row, int col, Entity entity){
-        gui.putEntity(row, col, entity);
+        //gui.putEntity(row, col, entity);
     }
     
     public void initLvl(int size){
-        gui.chargeLevel(size);
+        //gui.chargeLevel(size);
     }
     
     public void movePlayer(Direction dir){
-        map.movePlayer(dir);
+        //map.movePlayer(dir);
+    }
+    
+    /**
+     * @return the map
+     */
+    public Map getMap() {
+        return map;
+    }
+
+    /**
+     * @return the player
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * @return the gui
+     */
+    public GUIMain getGui() {
+        return gui;
     }
 }
