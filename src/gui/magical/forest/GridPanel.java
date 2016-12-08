@@ -36,6 +36,36 @@ public class GridPanel extends JPanel{
         //construction et ajout des cellules à la grille
         for (int row = 0; row < taille; row++) {
             for (int col = 0; col < taille; col++) {
+<<<<<<< HEAD
+=======
+                //On check le type de la cellule : ça peut-être un portail ou un monstre ou une crevasse (ou rien)
+                boolean isStargate = false;
+                boolean isCrevasse = false;
+                boolean isMonster = false;
+                int type = 0;
+//                if(col == map.getPortalCell().getCol()+1 && row == map.getPortalCell().getRow()+1){
+//                    isStargate = true;
+//                }
+//                for(int i=0; i<map.getCrevasseCells().size(); i++){
+//                    if(col == map.getCrevasseCells().get(i).getCol()+1 && row == map.getCrevasseCells().get(i).getRow()+1){
+//                        isCrevasse = true;
+//                    }
+//                }
+//                for(int i=0; i<map.getMonsterCells().size(); i++){
+//                    if(col == map.getMonsterCells().get(i).getCol()+1 && row == map.getMonsterCells().get(i).getRow()+1){
+//                        isMonster = true;
+//                    }
+//                }
+                
+                if(isStargate){
+                    type = 1;
+                }
+                else if (isCrevasse){
+                    type = 2;
+                }else if(isMonster){
+                    type = 3;
+                }
+>>>>>>> origin/Player
                 gbc.gridx = col;
                 gbc.gridy = row;
                 //construction de la forêt graphique exterieur (les arbres)
@@ -136,10 +166,32 @@ public class GridPanel extends JPanel{
      */
     public void addStargate(int col, int row){
         Component[] lc = this.getComponents();
+<<<<<<< HEAD
         CellPanel cpStargate = (CellPanel) lc[listNumCell[col+1][row+1]];
         cpStargate.setItem(1);
         cpStargate.getComponent(2).setVisible(true);
     }  
+=======
+        //CellPanel cpGame = (CellPanel) lc[listNumCell[map.getPlayerCell().getCol()+1][map.getPlayerCell().getRow()+1]];
+        if(!isGamer){
+            //cpGame.getComponent(0).setVisible(true);
+            isGamer = true;
+        }
+    }
+    /**
+     * Méthode qui permet d'ajouter à l'interface graphique les monstres du niveau (générés par l'environemment)
+     * @param map = la map du niveau (générée par l'environemment)
+     */
+    public void addMonsters(Map map){
+//        Component[] lc = this.getComponents();
+//        for(int i=0; i<map.getMonsterCells().size(); i++){
+//            CellPanel cpMonster = (CellPanel) lc[listNumCell[map.getMonsterCells().get(i).getCol()+1][map.getMonsterCells().get(i).getRow()+1]];
+//            cpMonster.getComponent(2).setVisible(true);
+//            addPoopMonster(map.getMonsterCells().get(i).getCol(), map.getMonsterCells().get(i).getRow());
+//        }
+        
+    }
+>>>>>>> origin/Player
     /**
      * Méthode qui permet d'ajouter un monstre à l'interface graphique
      * @param col = position X du monstre
@@ -158,8 +210,13 @@ public class GridPanel extends JPanel{
      */
     public void addPoop(int col, int row){
         Component[] lc = this.getComponents();
+<<<<<<< HEAD
         CellPanel poop = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         poop.getComponent(1).setVisible(true);        
+=======
+        //CellPanel cpStargate = (CellPanel) lc[listNumCell[map.getPortalCell().getCol()+1][map.getPortalCell().getRow()+1]];
+        //cpStargate.getComponent(2).setVisible(true);
+>>>>>>> origin/Player
     }
     
     /**
