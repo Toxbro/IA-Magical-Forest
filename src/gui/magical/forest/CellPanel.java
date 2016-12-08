@@ -24,20 +24,15 @@ public class CellPanel extends JPanel{
      * Item = Stargate or Monster or Crevasse
      */
     private GridPanel gp;
-    private int nbPoop;
-    private int nbCloud;
+    private JLabel item;
     /**
      * Constructeur de la classe qui permet de créer une cellule
      * @param gp = la forêt (/la grille)
      * @param type = représente l'item qui ira dans la sous case n°2 de la cellule
      */
-    public CellPanel(GridPanel gp, int type){
+    public CellPanel(GridPanel gp){
         //la forêt / la grille
         this.gp = gp;
-        //le "nombre" de poop présent sur la cellule
-        this.nbPoop = 0;
-        //le "nombre" de cloud présent sur la cellule
-        this.nbCloud = 0;
         //layout de la cellule
         setLayout(new GridLayout(2,2));
         
@@ -50,22 +45,6 @@ public class CellPanel extends JPanel{
         JLabel poop = new JLabel(new ImageIcon(((new ImageIcon("ressources/poop.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         JLabel cloud = new JLabel(new ImageIcon(((new ImageIcon("ressources/cloud.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         JLabel item = new JLabel();
-        //l'item que va accueillir la cellule
-        switch(type){
-            case 0:
-                break;
-            case 1:
-                item = new JLabel(new ImageIcon(((new ImageIcon("ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-                break;
-            case 2:
-                item = new JLabel(new ImageIcon(((new ImageIcon("ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
-                break;
-            case 3:
-                item = new JLabel(new ImageIcon(((new ImageIcon("ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-                break;
-            default:
-                break;
-        }
         
         jpGamer.setOpaque(false);
         jpPoop.setOpaque(false);
@@ -102,34 +81,24 @@ public class CellPanel extends JPanel{
     }
 
     /**
-     * getter du nombre théorique de poop sur la cellule
-     * @return the nbPoop
+     * Méthode qui permet d'initialiser l'image en fonction de l'item
+     * @param type : l'item de la case
      */
-    public int getNbPoop() {
-        return nbPoop;
-    }
-
-    /**
-     * setter qui permet d'ajouter/de retirer une poop au nombre de poop de la cellule
-     * @param nbPoop the nbPoop to set
-     */
-    public void setNbPoop(int nbPoop) {
-        this.nbPoop = this.nbPoop+nbPoop;
-    }
-
-    /**
-     * getter du nombre théorique de cloud sur la cellule
-     * @return the nbCloud
-     */
-    public int getNbCloud() {
-        return nbCloud;
-    }
-
-    /**
-     * setter qui permet d'ajouter/de retirer un cloud au nombre de cloud de la cellule
-     * @param nbCloud the nbCloud to set
-     */
-    public void setNbCloud(int nbCloud) {
-        this.nbCloud =  this.nbCloud+nbCloud;
+    public void setItem(int type) {
+        switch(type){
+            case 0:
+                break;
+            case 1:
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                break;
+            case 2:
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+                break;
+            case 3:
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                break;
+            default:
+                break;
+        }
     }
 }
