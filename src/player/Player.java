@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import ia.magical.forest.environment.Direction;
 import ia.magical.forest.environment.Entity;
+import java.awt.GridBagConstraints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -52,8 +53,11 @@ public class Player{
         inference();
         switch(action){
             case MOVE: main.movePlayer(direction);
+            break;
             case PORTAL: main.throughPortal();
+            break;
             case HIT: main.hit(direction);
+            break;
         }
     }
     
@@ -75,14 +79,18 @@ public class Player{
         ArrayList<Cell> adjCells = getAllAdjacentCells();
         ArrayList<Direction> ways = new ArrayList<>();
         for(Cell c : adjCells){
+            System.out.println("Get direction by cell : "+getDirectionByCell(c));
             if(!potentialCrackCells.containsKey(c) && !potentialMonsterCells.containsKey(c) && !crackCells.contains(c) && ! monsterCells.contains(c))
                 ways.add(getDirectionByCell(c));
         }
         action = Action.MOVE;
         direction = ways.get(new Random().nextInt(ways.size()));
+        System.out.println("Can move to "+ways);
+        System.out.println("Choosing "+direction);
     }
     
     private void thinkMonstersCracks(Entity smellOrWind){
+        System.out.println("STH : "+smellOrWind);
         ArrayList<Cell> dangerCells;
         HashMap<Cell, Double> potentialDangerCells;
         
@@ -144,13 +152,13 @@ public class Player{
     
     private Direction getDirectionByCell(Cell c){
         System.out.println("");
-        if(currentCell.getCol() == c.getCol() && currentCell.getRow() == c.getRow()+1)
+        if(currentCell.getCol() == c.getCol() && currentCell.getRow()+1 == c.getRow())
             return Direction.DOWN;
-        else if(currentCell.getCol() == c.getCol() && currentCell.getRow() == c.getRow()-1)
+        else if(currentCell.getCol() == c.getCol() && currentCell.getRow()-1 == c.getRow())
             return Direction.UP;
-        else if(currentCell.getCol() == c.getCol()+1 && currentCell.getRow() == c.getRow())
+        else if(currentCell.getCol()+1 == c.getCol() && currentCell.getRow() == c.getRow())
             return Direction.RIGHT;
-        else if(currentCell.getCol() == c.getCol()-1 && currentCell.getRow() == c.getRow())
+        else if(currentCell.getCol()-1 == c.getCol() && currentCell.getRow() == c.getRow())
             return Direction.LEFT;
         else {
             return null;
@@ -180,6 +188,11 @@ public class Player{
 
         public int getCol() {
             return col;
+        }
+        
+        @Override
+        public String toString(){
+            return "["+this.row+","+this.col+"]";
         }
     }
 }

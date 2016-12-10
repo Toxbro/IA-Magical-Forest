@@ -63,9 +63,9 @@ public class GUIMain extends javax.swing.JFrame {
 
         jbMove.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jbMove.setText("Move");
-        jbMove.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbMoveActionPerformed(evt);
+        jbMove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jbMoveMouseClicked(evt);
             }
         });
 
@@ -128,9 +128,9 @@ public class GUIMain extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMoveActionPerformed
-        main.playerAct();
-    }//GEN-LAST:event_jbMoveActionPerformed
+    private void jbMoveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jbMoveMouseClicked
+       main.playerAct();
+    }//GEN-LAST:event_jbMoveMouseClicked
 
     
 
