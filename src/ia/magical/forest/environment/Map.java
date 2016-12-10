@@ -93,6 +93,7 @@ public class Map {
             while (crevasseCell == monsterCell || monsterCells.contains(crevasseCell) || crevasseCells.contains(crevasseCell)) {
                 crevasseCell = getRandomCell();
             }
+            crevasseCells.add(crevasseCell);
         }
         
         //Setting boolean
@@ -319,7 +320,7 @@ public class Map {
      * @param playerCell the playerCell to set
      */
     public void setPlayerCell(Cell playerCell) {
-        if(monsterCells.contains(playerCell)){
+        if(monsterCells.contains(playerCell) || crevasseCells.contains(playerCell)){
             main.killPlayer();
         }
         else{
