@@ -25,6 +25,10 @@ public class CellPanel extends JPanel{
      */
     private GridPanel gp;
     private JLabel item;
+    private JPanel jpGamer;
+    private JPanel jpPoop;
+    private JPanel jpItem;
+    private JPanel jpCloud;
     /**
      * Constructeur de la classe qui permet de créer une cellule
      * @param gp = la forêt (/la grille)
@@ -36,15 +40,14 @@ public class CellPanel extends JPanel{
         //layout de la cellule
         setLayout(new GridLayout(2,2));
         
-        JPanel jpGamer = new JPanel();
-        JPanel jpPoop = new JPanel();
-        JPanel jpItem = new JPanel();
-        JPanel jpCloud = new JPanel();
+        jpGamer = new JPanel();
+        jpPoop = new JPanel();
+        jpItem = new JPanel();
+        jpCloud = new JPanel();
         
         JLabel gamer = new JLabel(new ImageIcon(((new ImageIcon("ressources/gamer.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         JLabel poop = new JLabel(new ImageIcon(((new ImageIcon("ressources/poop.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         JLabel cloud = new JLabel(new ImageIcon(((new ImageIcon("ressources/cloud.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-        JLabel item = new JLabel();
         
         jpGamer.setOpaque(false);
         jpPoop.setOpaque(false);
@@ -53,7 +56,6 @@ public class CellPanel extends JPanel{
         
         jpGamer.add(gamer);
         jpPoop.add(poop);
-        jpItem.add(item);
         jpCloud.add(cloud);
         
         jpGamer.setVisible(false);
@@ -90,12 +92,18 @@ public class CellPanel extends JPanel{
                 break;
             case 1:
                 this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                this.jpItem.add(this.item);
+                this.jpItem.setVisible(true);
                 break;
             case 2:
                 this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+                this.jpItem.add(this.item);
+                this.jpItem.setVisible(true);
                 break;
             case 3:
                 this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                this.jpItem.add(this.item);
+                this.jpItem.setVisible(true);
                 break;
             default:
                 break;

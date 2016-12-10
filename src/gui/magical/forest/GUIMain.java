@@ -166,6 +166,8 @@ public class GUIMain extends javax.swing.JFrame {
      * @param taille de la forêt
      */
     public void chargeLevel(int taille){
+        this.forest.removeAll();
+        this.forest.repaint();
         this.forest.initialize(this, taille);
         setLevel(taille-2);
         
@@ -203,6 +205,9 @@ public class GUIMain extends javax.swing.JFrame {
         }
         else if(entity == Entity.SMELL){
             this.forest.delPoop(col, row);
+        }
+        else if(entity == Entity.PLAYER){
+            this.forest.delGamer(col, row);
         }
     }
     

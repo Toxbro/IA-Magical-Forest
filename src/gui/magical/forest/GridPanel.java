@@ -24,7 +24,6 @@ public class GridPanel extends JPanel{
     private gui.magical.forest.GUIMain main;
     private int taille;
     private int[][] listNumCell;
-    private int actuColGamer, actuRowGamer;
     
     public void initialize(gui.magical.forest.GUIMain main, int tailleForet){
         /*taille de la grille = taille de la Foret + 2
@@ -37,35 +36,6 @@ public class GridPanel extends JPanel{
         //construction et ajout des cellules à la grille
         for (int row = 0; row < taille; row++) {
             for (int col = 0; col < taille; col++) {
-
-                //On check le type de la cellule : ça peut-être un portail ou un monstre ou une crevasse (ou rien)
-                boolean isStargate = false;
-                boolean isCrevasse = false;
-                boolean isMonster = false;
-                int type = 0;
-//                if(col == map.getPortalCell().getCol()+1 && row == map.getPortalCell().getRow()+1){
-//                    isStargate = true;
-//                }
-//                for(int i=0; i<map.getCrevasseCells().size(); i++){
-//                    if(col == map.getCrevasseCells().get(i).getCol()+1 && row == map.getCrevasseCells().get(i).getRow()+1){
-//                        isCrevasse = true;
-//                    }
-//                }
-//                for(int i=0; i<map.getMonsterCells().size(); i++){
-//                    if(col == map.getMonsterCells().get(i).getCol()+1 && row == map.getMonsterCells().get(i).getRow()+1){
-//                        isMonster = true;
-//                    }
-//                }
-                
-                if(isStargate){
-                    type = 1;
-                }
-                else if (isCrevasse){
-                    type = 2;
-                }else if(isMonster){
-                    type = 3;
-                }
-                
                 gbc.gridx = col;
                 gbc.gridy = row;
                 //construction de la forêt graphique exterieur (les arbres)
@@ -131,20 +101,6 @@ public class GridPanel extends JPanel{
         }
         return listNC;
     }
-    /**
-     * Méthode qui permet de déplacer le joueur sur l'interface graphique
-     * @param col = nouvelle position X (la colonne) du joueur 
-     * @param row = nouvelle position Y (la ligne) du joueur
-     */
-    public void moveGamer(int col, int row){
-        Component[] lc = this.getComponents();
-        CellPanel exCP = (CellPanel) lc[this.listNumCell[actuColGamer+1][actuRowGamer+1]];
-        CellPanel newCP = (CellPanel) lc[this.listNumCell[col+1][row+1]];
-        exCP.getComponent(0).setVisible(false);
-        newCP.getComponent(0).setVisible(true);
-        actuColGamer = col;
-        actuRowGamer = row;
-    }
     
     /**
      * Méthode qui permet d'ajouter à l'interface graphique le gamer du niveau
@@ -155,9 +111,19 @@ public class GridPanel extends JPanel{
         Component[] lc = this.getComponents();
         CellPanel cpGame = (CellPanel) lc[listNumCell[col+1][row+1]];
         cpGame.getComponent(0).setVisible(true);
-        actuColGamer = col;
-        actuRowGamer = row;
     }
+    /**
+     * Méthode qui permet d'enlever à l'interface graphique le gamer du niveau
+     * @param col = position X du joueur
+     * @param row = position Y du joueur
+     */
+    public void delGamer(int col, int row){
+        Component[] lc = this.getComponents();
+        CellPanel cpGame = (CellPanel) lc[listNumCell[col+1][row+1]];
+        cpGame.getComponent(0).setVisible(false);
+    }
+    
+    
     /**
      * Méthode qui permet d'ajouter à l'interface graphique le portail du niveau
      * 
@@ -170,25 +136,6 @@ public class GridPanel extends JPanel{
         cpStargate.setItem(1);
         cpStargate.getComponent(2).setVisible(true);
     }  
-    
-//        //CellPanel cpGame = (CellPanel) lc[listNumCell[map.getPlayerCell().getCol()+1][map.getPlayerCell().getRow()+1]];
-//        if(!isGamer){
-//            //cpGame.getComponent(0).setVisible(true);
-//            isGamer = true;
-//        }
-//    }
-    /**
-     * Méthode qui permet d'ajouter à l'interface graphique les monstres du niveau (générés par l'environemment)
-     * @param map = la map du niveau (générée par l'environemment)
-     */
-//  public void addMonsters(Map map){
-//        Component[] lc = this.getComponents();
-//        for(int i=0; i<map.getMonsterCells().size(); i++){
-//            CellPanel cpMonster = (CellPanel) lc[listNumCell[map.getMonsterCells().get(i).getCol()+1][map.getMonsterCells().get(i).getRow()+1]];
-//            cpMonster.getComponent(2).setVisible(true);
-//            addPoopMonster(map.getMonsterCells().get(i).getCol(), map.getMonsterCells().get(i).getRow());
-//        }
-//    }
 
     /**
      * Méthode qui permet d'ajouter un monstre à l'interface graphique
@@ -259,5 +206,5 @@ public class GridPanel extends JPanel{
         Component[] lc = this.getComponents();
         CellPanel cloud = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         cloud.getComponent(3).setVisible(true);
-    }  
+    } 
 }
