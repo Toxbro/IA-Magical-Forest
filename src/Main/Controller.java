@@ -6,9 +6,11 @@
 package Main;
 
 import gui.magical.forest.GUIMain;
+import ia.magical.forest.environment.Cell;
 import ia.magical.forest.environment.Direction;
 import ia.magical.forest.environment.Entity;
 import ia.magical.forest.environment.Map;
+import java.util.ArrayList;
 import player.Player;
 
 /**
@@ -20,46 +22,66 @@ public class Controller {
     private Map map;
     private Player player;
     private GUIMain gui;
-    
-<<<<<<< HEAD
-    public void main(String[] args){
-        map = new Map(this, 3);
-        player = new Player(map);
-=======
-    public Controller(){
-        map = new Map(3);
-        player = new Player(this);
->>>>>>> origin/Player
-        gui = new GUIMain();
-    }
+    private int score = 0;
+    private int level = 3;
     
     public static void main(String[] args){
         Controller controller = new Controller();
     }
     
-    public void putEntity(int row, int col, Entity entity){
-        //gui.putEntity(row, col, entity);
+    public Controller(){
+        gui = new GUIMain(this);
+        player = new Player(this);
+        gui.chargeLevel(level);
+        map = new Map(this, level);
     }
     
-<<<<<<< HEAD
+    public void putEntity(int row, int col, Entity entity){
+        gui.putEntity(row, col, entity);
+    }
+    
     public void removeEntity(int row, int col, Entity entity){
         gui.removeEntity(row, col, entity);
     }
     
-    public void newLevel(){
-        map = new Map(this, map.getSize()+1);
-        gui.chargeLevel(map.getSize());
+    public void newLevel(int delta){
+        level += delta;
+        player = new Player(this);
+        gui.chargeLevel(level);
+        map = new Map(this, level);        
     }
     
     public void movePlayer(Direction dir){
         map.setPlayerCell(map.getCellByDirection(map.getPlayerCell(), dir));
-=======
-    public void initLvl(int size){
-        //gui.chargeLevel(size);
+        gui.setConsoleText("Je me déplace vers "+dir.toString()+'.');
+        editScore(-1);
     }
     
-    public void movePlayer(Direction dir){
-        //map.movePlayer(dir);
+    public void playerAct(){
+        player.act();
+    }
+    
+    public void hit(Direction dir){
+        map.removeMonster(map.getCellByDirection(map.getPlayerCell(), dir));
+        gui.setConsoleText("Je tire vers "+dir.toString()+'.');
+        editScore(-10);
+    }
+    
+    public void throughPortal(){
+        gui.setConsoleText("J'ai trouvé le portail !!");
+        editScore(10*map.getSize());
+        newLevel(1);
+    }
+    
+    public void killPlayer(){
+        gui.setConsoleText("Je suis mort.");
+        editScore(-10*map.getSize());
+        newLevel(0);
+    }
+    
+    public void editScore(int delta){
+        score += delta;
+        gui.setScore(score);
     }
     
     /**
@@ -81,6 +103,24 @@ public class Controller {
      */
     public GUIMain getGui() {
         return gui;
->>>>>>> origin/Player
+    }
+    
+    public boolean isCellSth(Entity ent){
+        switch(ent){
+            case CRACK: return map.getPlayerCell().isHasCrevasse();
+            case WIND: return map.getPlayerCell().isIsWindy();            
+            case MONSTER: return map.getPlayerCell().isHasMonster();
+            case SMELL: return map.getPlayerCell().isIsSmelling();
+            case PORTAL: return map.getPlayerCell().isIsShiny();
+            default: return false;
+        }
+    }
+    
+    public ArrayList<Direction> getPossibleDirection(){
+        ArrayList<Direction> result = new ArrayList<>();
+        for(Cell c : map.getCloseCells(map.getPlayerCell())){
+            result.add(map.getDirectionFromCell(map.getPlayerCell(), c));
+        }
+        return result;
     }
 }

@@ -25,6 +25,7 @@ public class GridPanel extends JPanel{
     private int taille;
     private int[][] listNumCell;
     private int actuColGamer, actuRowGamer;
+    
     public void initialize(gui.magical.forest.GUIMain main, int tailleForet){
         /*taille de la grille = taille de la Foret + 2
         *  2 = le contour qui accueil les arbres
@@ -36,8 +37,7 @@ public class GridPanel extends JPanel{
         //construction et ajout des cellules à la grille
         for (int row = 0; row < taille; row++) {
             for (int col = 0; col < taille; col++) {
-<<<<<<< HEAD
-=======
+
                 //On check le type de la cellule : ça peut-être un portail ou un monstre ou une crevasse (ou rien)
                 boolean isStargate = false;
                 boolean isCrevasse = false;
@@ -65,7 +65,7 @@ public class GridPanel extends JPanel{
                 }else if(isMonster){
                     type = 3;
                 }
->>>>>>> origin/Player
+                
                 gbc.gridx = col;
                 gbc.gridy = row;
                 //construction de la forêt graphique exterieur (les arbres)
@@ -166,32 +166,30 @@ public class GridPanel extends JPanel{
      */
     public void addStargate(int col, int row){
         Component[] lc = this.getComponents();
-<<<<<<< HEAD
         CellPanel cpStargate = (CellPanel) lc[listNumCell[col+1][row+1]];
         cpStargate.setItem(1);
         cpStargate.getComponent(2).setVisible(true);
     }  
-=======
-        //CellPanel cpGame = (CellPanel) lc[listNumCell[map.getPlayerCell().getCol()+1][map.getPlayerCell().getRow()+1]];
-        if(!isGamer){
-            //cpGame.getComponent(0).setVisible(true);
-            isGamer = true;
-        }
-    }
+    
+//        //CellPanel cpGame = (CellPanel) lc[listNumCell[map.getPlayerCell().getCol()+1][map.getPlayerCell().getRow()+1]];
+//        if(!isGamer){
+//            //cpGame.getComponent(0).setVisible(true);
+//            isGamer = true;
+//        }
+//    }
     /**
      * Méthode qui permet d'ajouter à l'interface graphique les monstres du niveau (générés par l'environemment)
      * @param map = la map du niveau (générée par l'environemment)
      */
-    public void addMonsters(Map map){
+//  public void addMonsters(Map map){
 //        Component[] lc = this.getComponents();
 //        for(int i=0; i<map.getMonsterCells().size(); i++){
 //            CellPanel cpMonster = (CellPanel) lc[listNumCell[map.getMonsterCells().get(i).getCol()+1][map.getMonsterCells().get(i).getRow()+1]];
 //            cpMonster.getComponent(2).setVisible(true);
 //            addPoopMonster(map.getMonsterCells().get(i).getCol(), map.getMonsterCells().get(i).getRow());
 //        }
-        
-    }
->>>>>>> origin/Player
+//    }
+
     /**
      * Méthode qui permet d'ajouter un monstre à l'interface graphique
      * @param col = position X du monstre
@@ -203,6 +201,7 @@ public class GridPanel extends JPanel{
         cpMonster.setItem(3);
         cpMonster.getComponent(2).setVisible(true);       
     }
+
     /**
      * Méthode qui ajoute une case odorante à l'interface graphique
      * @param col = position X de la case odorante
@@ -210,13 +209,11 @@ public class GridPanel extends JPanel{
      */
     public void addPoop(int col, int row){
         Component[] lc = this.getComponents();
-<<<<<<< HEAD
         CellPanel poop = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         poop.getComponent(1).setVisible(true);        
-=======
+
         //CellPanel cpStargate = (CellPanel) lc[listNumCell[map.getPortalCell().getCol()+1][map.getPortalCell().getRow()+1]];
         //cpStargate.getComponent(2).setVisible(true);
->>>>>>> origin/Player
     }
     
     /**
@@ -229,6 +226,7 @@ public class GridPanel extends JPanel{
         CellPanel monster = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         monster.getComponent(2).setVisible(false);
     }
+
     /**
      * Méthode qui permet d'enlever une case odorante de l'interface grahpique
      * @param col = position X de la case odorante
@@ -239,6 +237,7 @@ public class GridPanel extends JPanel{
         CellPanel poop = (CellPanel) lc[this.listNumCell[col+1][row+1]];
         poop.getComponent(1).setVisible(false);
     }
+
     /**
      * Méthode qui permet d'ajouter une crevasse à l'interface graphique
      * @param col = position X de la crevasse
@@ -250,6 +249,7 @@ public class GridPanel extends JPanel{
         cpCrevasses.setItem(2);
         cpCrevasses.getComponent(2).setVisible(true);
     }
+
     /**
      * Méthode qui permet d'ajouter une case venteuse à l'interface graphique
      * @param col = position X de la case venteuse

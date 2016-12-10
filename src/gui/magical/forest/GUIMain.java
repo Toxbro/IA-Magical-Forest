@@ -23,12 +23,14 @@ import javax.swing.text.StyledDocument;
 public class GUIMain extends javax.swing.JFrame {
     
     private int level;
+    private Controller main;
 
     /**
      * Creates new form GUIMain
      */
-    public GUIMain() {
+    public GUIMain(Controller main) {
         initComponents();
+        this.main = main;
         console.setLineWrap(true);
         jtpScore.setOpaque(true);
         StyledDocument doc = jtpScore.getStyledDocument();		
@@ -36,7 +38,7 @@ public class GUIMain extends javax.swing.JFrame {
         StyleConstants.setAlignment(right, StyleConstants.ALIGN_RIGHT);
         doc.setParagraphAttributes(0, 0, right, false);
         this.setExtendedState(this.MAXIMIZED_BOTH);
-        
+        this.setVisible(true);
     }
 
     /**
@@ -127,44 +129,9 @@ public class GUIMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbMoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbMoveActionPerformed
-        // TODO add your handling code here:
+        main.playerAct();
     }//GEN-LAST:event_jbMoveActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUIMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUIMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUIMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUIMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                GUIMain gui = new GUIMain();
-                gui.setVisible(true);
-            }
-        });
-    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

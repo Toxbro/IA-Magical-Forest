@@ -31,11 +31,6 @@ public class Map {
     private ArrayList<Cell> cells;
     
     /**
-     * The player
-     */
-    //private Player player;
-    
-    /**
      * Monsters cells
      */
     private ArrayList<Cell> monsterCells;
@@ -82,6 +77,8 @@ public class Map {
         //Special cells initialization
         crevasseCells = new ArrayList<>();
         monsterCells = new ArrayList<>();
+        smellingCells = new ArrayList<>();
+        windyCells = new ArrayList<>();
         
         int numberOfObstacle = (int)(size/3);
         
@@ -312,7 +309,6 @@ public class Map {
     }
     
     /**
-<<<<<<< HEAD
      * @return the playerCell
      */
     public Cell getPlayerCell() {
@@ -323,7 +319,14 @@ public class Map {
      * @param playerCell the playerCell to set
      */
     public void setPlayerCell(Cell playerCell) {
-        this.playerCell = playerCell;
+        if(monsterCells.contains(playerCell)){
+            main.killPlayer();
+        }
+        else{
+            main.removeEntity(this.playerCell.getRow(), this.playerCell.getCol(), Entity.PLAYER);
+            this.playerCell = playerCell;        
+            main.putEntity(this.playerCell.getRow(), this.playerCell.getCol(), Entity.PLAYER);
+        }
     }
     
     /**
@@ -350,9 +353,10 @@ public class Map {
                 }
             }
         }
+    }
         
-=======
-     * Method called to get the direction from a cell to another
+
+    /* Method called to get the direction from a cell to another
      * @param start Cell starting from
      * @param end Targeted cell
      * @return The direction if possible, null else
@@ -381,17 +385,9 @@ public class Map {
     }
 
     /**
-     * @return the playerCell
-     */
-    public Cell getPlayerCell() {
-        return playerCell;
-    }
-
-    /**
      * @return the portalCell
      */
     public Cell getPortalCell() {
         return portalCell;
->>>>>>> origin/Player
     }
 }

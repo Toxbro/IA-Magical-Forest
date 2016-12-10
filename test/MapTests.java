@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import Main.Controller;
 import ia.magical.forest.environment.Cell;
 import ia.magical.forest.environment.Map;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class MapTests {
     
     @BeforeClass
     public static void setUpClass() {
-        map = new Map(3);
+        map = new Map(new Controller(), 3);
     }
     
     @AfterClass
@@ -44,8 +45,8 @@ public class MapTests {
     
     @Test
     public void testConstructor(){
-        Cell monsterCell = map.getMonsterCell();
-        Cell crevasseCell = map.getCrevasseCell();
+        ArrayList<Cell> monsterCell = map.getMonsterCells();
+        ArrayList<Cell> crevasseCell = map.getCrevasseCells();
         assertNotNull(monsterCell);
         assertNotNull(crevasseCell);
         assertNotEquals(monsterCell, crevasseCell);
