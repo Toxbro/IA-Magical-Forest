@@ -5,7 +5,6 @@
  */
 package gui.magical.forest;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -45,9 +44,9 @@ public class CellPanel extends JPanel{
         jpItem = new JPanel();
         jpCloud = new JPanel();
         
-        JLabel gamer = new JLabel(new ImageIcon(((new ImageIcon("ressources/gamer.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-        JLabel poop = new JLabel(new ImageIcon(((new ImageIcon("ressources/poop.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
-        JLabel cloud = new JLabel(new ImageIcon(((new ImageIcon("ressources/cloud.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+        JLabel gamer = new JLabel(new ImageIcon(((new ImageIcon("../ressources/gamer.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+        JLabel poop = new JLabel(new ImageIcon(((new ImageIcon("../ressources/poop.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+        JLabel cloud = new JLabel(new ImageIcon(((new ImageIcon("../ressources/cloud.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
         
         jpGamer.setOpaque(false);
         jpPoop.setOpaque(false);
@@ -91,17 +90,17 @@ public class CellPanel extends JPanel{
             case 0:
                 break;
             case 1:
-                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("../ressources/stargate.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
                 this.jpItem.add(this.item);
                 this.jpItem.setVisible(true);
                 break;
             case 2:
-                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("../ressources/crevasse.png")).getImage()).getScaledInstance(25,25, java.awt.Image.SCALE_SMOOTH)));
                 this.jpItem.add(this.item);
                 this.jpItem.setVisible(true);
                 break;
             case 3:
-                this.item = new JLabel(new ImageIcon(((new ImageIcon("ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
+                this.item = new JLabel(new ImageIcon(((new ImageIcon("../ressources/monster.png")).getImage()).getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH)));
                 this.jpItem.add(this.item);
                 this.jpItem.setVisible(true);
                 break;

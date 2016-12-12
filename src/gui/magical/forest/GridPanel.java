@@ -5,7 +5,6 @@
  */
 package gui.magical.forest;
 
-import ia.magical.forest.environment.Map;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;

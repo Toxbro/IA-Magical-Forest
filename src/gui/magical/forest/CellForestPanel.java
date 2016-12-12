@@ -5,15 +5,9 @@
  */
 package gui.magical.forest;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
 /**
  * Classe représentant une cellule exterieur (où le joueur ne peut pas aller) de la forêt (/la grille)
@@ -29,7 +23,7 @@ public class CellForestPanel extends JPanel{
     public CellForestPanel(GridPanel gp){
         this.gp = gp;
         JPanel jpT = new JPanel();
-        JLabel tree = new JLabel(new ImageIcon(((new ImageIcon("ressources/tree.png")).getImage()).getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
+        JLabel tree = new JLabel(new ImageIcon(((new ImageIcon("../ressources/tree.png")).getImage()).getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)));
         jpT.setOpaque(false);
         jpT.add(tree);
         jpT.setVisible(true); 

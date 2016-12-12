@@ -1,41 +1,69 @@
 package player;
 
 import Main.Controller;
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import ia.magical.forest.environment.Direction;
 import ia.magical.forest.environment.Entity;
-import java.awt.GridBagConstraints;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
-
 /**
- *
- * @author quentin
+ * Player's knowledges and decision making processes.
+ * @author Quentin ROLLIN
  */
 public class Player{
     
+    /**
+     * The list of all the already explored cells.
+     * The coordinates of the cells are relatives compared to the player's initial cell.
+     */
     private ArrayList<Cell> exploredCells;
+    
+    /**
+     * The current cell of the player.
+     */
     private Cell currentCell;
+    
+    /**
+     * The controller.
+     */
     private Controller main;
+    
+    /**
+     * A list of all known (or almost certain) cracks cells.
+     */
     private ArrayList<Cell> crackCells;
+    
+    /**
+     * A hashmap of potential cracks cells, in addition to their respective probability.
+     */
     private HashMap<Cell, Double> potentialCrackCells;
+    
+    /**
+     * A list of all known (or almost certain) monsters cells.
+     */
     private ArrayList<Cell> monsterCells;
+    
+    /**
+     * A hashmap of potential monsters cells, in addition to their respective probability.
+     */
     private HashMap<Cell, Double> potentialMonsterCells;
+    
+    /**
+     * The action the player choosed to do.
+     */
     private Action action;
+    
+    /**
+     * The direction the player choosed to go or to throw a rock.
+     */
     private Direction direction;
 
+    /**
+     * The constructor of the player initialize all the lists and hashmap, in addition to creating the initial cell.
+     * @param main The controller which create the player.
+     */
     public Player(Controller main){
         this.main = main;
         currentCell = new Cell(0, 0);
@@ -46,6 +74,9 @@ public class Player{
         potentialMonsterCells = new HashMap<>();
     }
      
+    /**
+     * This method call the inference process, where the player decide his next action and direction, en call the controller methods according to this action.
+     */
     public void act(){
         inference();
         switch(action){
@@ -62,9 +93,13 @@ public class Player{
         }
     }
     
-    public void inference(){        
-        
-        //Player on portal cell
+    /**
+     * The inference process interpretes the current situation of the player, and then decides on the next action to do.
+     * To do so, it first checks wether or not the player is already on the portal cell.
+     * Then, he thinks about the probability of each adjacent containing a crack or a monster, according to his own cell smell or wind.
+     * Last, he decides what to do.
+     */
+    public void inference(){
         if (main.isCellSth(Entity.PORTAL)) {
             action = Action.PORTAL;
         }
@@ -80,43 +115,48 @@ public class Player{
             System.out.println("potentialCrackCells : "+potentialCrackCells);
             
             direction = getSafeDirection();
-            System.out.println("safe direction : "+direction);
             
             if(direction == null){
                 direction = getSafestDirection();
-                System.out.println("safest direction : "+direction);
             }
             
             if(direction == null)
             {
                 ArrayList<Cell> knownAdjCell = getAllAdjacentCells();
                 if(!exploredCells.isEmpty())
-                    knownAdjCell.retainAll(exploredCells);
-                direction = getDirectionByCell(knownAdjCell.get(new Random().nextInt(knownAdjCell.size())));
-                System.out.println("explored direction : "+direction);
+                    knownAdjCell.retainAll(exploredCells); //At this point, the player must choose an already explored cell to move to.
+                direction = getDirectionByCell(knownAdjCell.get(new Random().nextInt(knownAdjCell.size()))); //this choice is randomly made.
             }
             
             action = Action.MOVE;
         }
     }
     
+    /**
+     * This method takes all the adjacents cells, minus the already explored ones, potential monster and crack ones, and certain monster and cracks ones.
+     * It then chooses randomly a cell among this selection, and return its direction.
+     * If there is none left, it returns null.
+     * @return the direction of a safe cell, if such cell exists.
+     */
     private Direction getSafeDirection(){
         ArrayList<Cell> safeAdjCells = getAllAdjacentCells();
-        System.out.println(safeAdjCells);
         safeAdjCells.removeAll(monsterCells);
-        System.out.println(safeAdjCells);
         safeAdjCells.removeAll(crackCells); 
-        System.out.println(safeAdjCells);
         safeAdjCells.removeAll(new ArrayList<Cell>(potentialCrackCells.keySet()));
-        System.out.println(safeAdjCells);
         safeAdjCells.removeAll(new ArrayList<Cell>(potentialMonsterCells.keySet()));
-        System.out.println(safeAdjCells);
         safeAdjCells.removeAll(exploredCells);
         if(safeAdjCells.isEmpty())
             return null;
         return getDirectionByCell(safeAdjCells.get(new Random().nextInt(safeAdjCells.size())));
     }
     
+    /**
+     * This method only considers cells that potentially contain a monster or a crack.
+     * To do so, it finds the cell with the least probable existence of a monster or a crack, and only if this probability of existence is less than 25% (50/200). 
+     * If there is multiple choices, it chooses randomly.
+     * If the cell is smelly, which means there is a nearby monster, it shot in that direction before moving.
+     * @return the direction of an almost safe close cell, according to its probability of containing an hazard.
+     */
     private Direction getSafestDirection(){
         ArrayList<Cell> unknownAdjCells = getAllAdjacentCells();
         unknownAdjCells.removeAll(monsterCells);
@@ -164,6 +204,11 @@ public class Player{
         return null;
     }
     
+    /**
+     * This method update the probability of existence of monster or crack in nearby cells.
+     * If an adjacent cell has a probability superior than 70%, the cell is considered as containing an hazard.
+     * @param smellOrWind The state of the current cell, if it is smelly or windy (this method is called twice if the cell is both).
+     */
     private void thinkMonstersCracks(Entity smellOrWind){
         ArrayList<Cell> dangerCells;
         HashMap<Cell, Double> potentialDangerCells;
@@ -172,12 +217,10 @@ public class Player{
             dangerCells = monsterCells;
             potentialDangerCells = potentialMonsterCells;
         }
-        else if(smellOrWind == Entity.WIND){
+        else{
             dangerCells = crackCells;
             potentialDangerCells = potentialCrackCells;
         }
-        else
-            return;
 
         ArrayList<Cell> adjUnknownCells = getAllAdjacentCells();
         adjUnknownCells.removeAll(exploredCells);
@@ -197,26 +240,11 @@ public class Player{
         potentialDangerCells.keySet().removeAll(dangerCells);
     }
     
-//    private void explore() {
-//        ArrayList<Cell> adjacent = getAllAdjacentCells();
-//        ArrayList<Cell> unknown = new ArrayList<Cell>();
-//        for(Cell c : adjacent) {
-//            if(!exploredCells.contains(c)) {
-//                grid.put(c, 0);
-//                unknown.add(c);
-//                cellTotal--;
-//            }
-//        }
-//        if(cellTotal == 0)
-//            isExploDone = true;
-//        else
-//            if(unknown.size() == 0){
-//                move(getDir(currentCell, adjacent.get((int) (Math.random()*adjacent.size()))));
-//            }
-//            else
-//                move(getDir(currentCell, unknown.get((int) (Math.random() * unknown.size()))));
-//    }
-    
+    /**
+     * This method create a new instance of the cell in the considered direction, according to the current position of the player.
+     * @param dir the considered direction.
+     * @return a new instance of the cell in the considered direction.
+     */
     private Cell getCellByDirection(Direction dir){
         switch(dir){
             case UP: return new Cell(currentCell.getRow()-1, currentCell.getCol());
@@ -227,6 +255,11 @@ public class Player{
         }
     }
     
+    /**
+     * This method is the opposite of {@link #getCellByDirection(ia.magical.forest.environment.Direction)}. It returns the direction of the considered cell, according to the current one.
+     * @param c The considered cell.
+     * @return the direction of the considered cell, or null if the cell is not adjacent to the current one.
+     */
     private Direction getDirectionByCell(Cell c){
         if(currentCell.getCol() == c.getCol() && currentCell.getRow()+1 == c.getRow())
             return Direction.DOWN;
@@ -241,6 +274,10 @@ public class Player{
         }
     }
     
+    /**
+     * Returns all the adjacent possible cells.
+     * @return all the adjacent possible cells.
+     */
     private ArrayList<Cell> getAllAdjacentCells(){
         ArrayList<Cell> result = new ArrayList<>();
         for(Direction dir : main.getPossibleDirection()){
@@ -249,6 +286,12 @@ public class Player{
         return result;
     }
     
+    /**
+     * Check wether or not the given hashmap contains the given cell.
+     * @param list An hashmap of cells and double.
+     * @param c A cell.
+     * @return True if list contains c, false if not.
+     */
     private boolean contains(HashMap<Cell, Double> list, Cell c){
         for (Map.Entry<Cell, Double> entry : list.entrySet()) {
             if(entry.getKey().equals(c))
@@ -257,6 +300,12 @@ public class Player{
         return false;        
     }
     
+    /**
+     * Check wether or not the given arraylist contains the given cell.
+     * @param list An arraylist of cells.
+     * @param c A cell.
+     * @return True if list contains c, false if not.
+     */
     private boolean contains(ArrayList<Cell> list, Cell c){
         for(Cell cell : list) {
             if(cell.equals(c))
@@ -265,6 +314,9 @@ public class Player{
         return false; 
     }
     
+    /**
+     * This class presents a small cell object, with coordinates relative to the initial cell of the player.
+     */
     private class Cell{
         private int row;
         private int col;

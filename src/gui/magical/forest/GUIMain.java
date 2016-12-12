@@ -7,10 +7,6 @@ package gui.magical.forest;
 
 import Main.Controller;
 import ia.magical.forest.environment.Entity;
-import ia.magical.forest.environment.Map;
-import java.awt.Font;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;

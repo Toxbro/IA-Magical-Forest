@@ -95,10 +95,4 @@ public class MapTests {
         Cell cell = map.getRandomCell();
         assertNotNull(cell);
     }
-
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
 }
