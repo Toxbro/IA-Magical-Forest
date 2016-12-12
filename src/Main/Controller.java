@@ -121,7 +121,6 @@ public class Controller {
         for(Cell c : map.getCloseCells(map.getPlayerCell())){
             result.add(map.getDirectionFromCell(map.getPlayerCell(), c));
         }
-        System.out.println("Player can move to : "+result);
         return result;
     }
 }

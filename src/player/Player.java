@@ -9,7 +9,9 @@ import ia.magical.forest.environment.Direction;
 import ia.magical.forest.environment.Entity;
 import java.awt.GridBagConstraints;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /*
@@ -25,10 +27,7 @@ import java.util.Random;
 public class Player{
     
     private ArrayList<Cell> exploredCells;
-    private Cell initialCell;
     private Cell currentCell;
-    private Cell lastCell;
-    private Direction lastCellByDirection;
     private Controller main;
     private ArrayList<Cell> crackCells;
     private HashMap<Cell, Double> potentialCrackCells;
@@ -39,9 +38,7 @@ public class Player{
 
     public Player(Controller main){
         this.main = main;
-        initialCell = new Cell(0, 0);
-        currentCell = initialCell;
-        lastCell = currentCell;
+        currentCell = new Cell(0, 0);
         exploredCells = new ArrayList<>();
         crackCells = new ArrayList<>();
         monsterCells = new ArrayList<>();
@@ -52,72 +49,152 @@ public class Player{
     public void act(){
         inference();
         switch(action){
-            case MOVE: main.movePlayer(direction);
-            break;
+            case MOVE: {
+                potentialCrackCells.remove(currentCell);
+                potentialMonsterCells.remove(currentCell);
+                exploredCells.add(currentCell);
+                currentCell = getCellByDirection(direction);
+                main.movePlayer(direction);
+                break;
+            }
             case PORTAL: main.throughPortal();
-            break;
-            case HIT: main.hit(direction);
             break;
         }
     }
     
     public void inference(){        
-                
+        
         //Player on portal cell
         if (main.isCellSth(Entity.PORTAL)) {
             action = Action.PORTAL;
         }
-        else if (main.isCellSth(Entity.WIND) && !exploredCells.contains(currentCell))
-            thinkMonstersCracks(Entity.WIND);
-        else if (main.isCellSth(Entity.SMELL) && !exploredCells.contains(currentCell))
-            thinkMonstersCracks(Entity.SMELL);
-        else if(!exploredCells.contains(currentCell)){
-            potentialCrackCells.remove(currentCell);
-            potentialMonsterCells.remove(currentCell);
+        else{
+            if (main.isCellSth(Entity.WIND) && !contains(exploredCells, currentCell))
+                thinkMonstersCracks(Entity.WIND);
+            if (main.isCellSth(Entity.SMELL) && !contains(exploredCells, currentCell))
+                thinkMonstersCracks(Entity.SMELL);
+            
+            System.out.println("monsterCells : "+monsterCells);
+            System.out.println("crackCells : "+crackCells);
+            System.out.println("potentialMonsterCells : "+potentialMonsterCells);
+            System.out.println("potentialCrackCells : "+potentialCrackCells);
+            
+            direction = getSafeDirection();
+            System.out.println("safe direction : "+direction);
+            
+            if(direction == null){
+                direction = getSafestDirection();
+                System.out.println("safest direction : "+direction);
+            }
+            
+            if(direction == null)
+            {
+                ArrayList<Cell> knownAdjCell = getAllAdjacentCells();
+                if(!exploredCells.isEmpty())
+                    knownAdjCell.retainAll(exploredCells);
+                direction = getDirectionByCell(knownAdjCell.get(new Random().nextInt(knownAdjCell.size())));
+                System.out.println("explored direction : "+direction);
+            }
+            
+            action = Action.MOVE;
         }
+    }
+    
+    private Direction getSafeDirection(){
+        ArrayList<Cell> safeAdjCells = getAllAdjacentCells();
+        System.out.println(safeAdjCells);
+        safeAdjCells.removeAll(monsterCells);
+        System.out.println(safeAdjCells);
+        safeAdjCells.removeAll(crackCells); 
+        System.out.println(safeAdjCells);
+        safeAdjCells.removeAll(new ArrayList<Cell>(potentialCrackCells.keySet()));
+        System.out.println(safeAdjCells);
+        safeAdjCells.removeAll(new ArrayList<Cell>(potentialMonsterCells.keySet()));
+        System.out.println(safeAdjCells);
+        safeAdjCells.removeAll(exploredCells);
+        if(safeAdjCells.isEmpty())
+            return null;
+        return getDirectionByCell(safeAdjCells.get(new Random().nextInt(safeAdjCells.size())));
+    }
+    
+    private Direction getSafestDirection(){
+        ArrayList<Cell> unknownAdjCells = getAllAdjacentCells();
+        unknownAdjCells.removeAll(monsterCells);
+        unknownAdjCells.removeAll(crackCells);
+        unknownAdjCells.removeAll(exploredCells);
         
-        ArrayList<Cell> adjCells = getAllAdjacentCells();
-        ArrayList<Direction> ways = new ArrayList<>();
-        for(Cell c : adjCells){
-            System.out.println("Get direction by cell : "+getDirectionByCell(c));
-            if(!potentialCrackCells.containsKey(c) && !potentialMonsterCells.containsKey(c) && !crackCells.contains(c) && ! monsterCells.contains(c))
-                ways.add(getDirectionByCell(c));
+        if(unknownAdjCells.isEmpty())
+            return null;
+
+        ArrayList<Cell> temp = new ArrayList<>(potentialCrackCells.keySet());
+        temp.removeAll(new ArrayList<Cell>(potentialMonsterCells.keySet()));
+        temp.addAll(new ArrayList<Cell>(potentialMonsterCells.keySet()));
+        unknownAdjCells.retainAll(temp);
+        
+
+        double probability = Double.MAX_VALUE;
+        ArrayList<Cell> bestChoice = new ArrayList<>();
+        for(Cell c : unknownAdjCells){
+            double tempProb = 0;
+            if(contains(potentialMonsterCells, c)){
+                tempProb += potentialMonsterCells.get(c);
+            }
+            if(contains(potentialCrackCells, c)){
+                tempProb += potentialCrackCells.get(c);
+            }
+            if(tempProb < probability){
+                bestChoice.clear();
+                bestChoice.add(c);
+                probability = tempProb;
+            }
+            else if(tempProb == probability)
+                bestChoice.add(c);
         }
-        action = Action.MOVE;
-        direction = ways.get(new Random().nextInt(ways.size()));
-        System.out.println("Can move to "+ways);
-        System.out.println("Choosing "+direction);
+        if(probability < 50){
+            return getDirectionByCell(bestChoice.get(new Random().nextInt(bestChoice.size())));
+        }
+        else if(main.isCellSth(Entity.SMELL)){
+            Cell target = bestChoice.get(new Random().nextInt(bestChoice.size()));
+            Direction dir = getDirectionByCell(target);
+            potentialMonsterCells.remove(target);
+            monsterCells.remove(target);
+            main.hit(dir);
+            return dir;
+        }
+        return null;
     }
     
     private void thinkMonstersCracks(Entity smellOrWind){
-        System.out.println("STH : "+smellOrWind);
         ArrayList<Cell> dangerCells;
         HashMap<Cell, Double> potentialDangerCells;
         
         if(smellOrWind == Entity.SMELL){
             dangerCells = monsterCells;
             potentialDangerCells = potentialMonsterCells;
-
         }
-        else {
+        else if(smellOrWind == Entity.WIND){
             dangerCells = crackCells;
             potentialDangerCells = potentialCrackCells;
         }
+        else
+            return;
 
         ArrayList<Cell> adjUnknownCells = getAllAdjacentCells();
         adjUnknownCells.removeAll(exploredCells);
 
         for(Cell c : adjUnknownCells){
-            if(potentialDangerCells.containsKey(c))
+            if(contains(potentialDangerCells,c))
                 potentialDangerCells.put(c, potentialDangerCells.get(c)+100.0/adjUnknownCells.size());
             else
                 potentialDangerCells.put(c, 100.0/adjUnknownCells.size());
         }
 
-        for (java.util.Map.Entry<Cell, Double> entry : potentialDangerCells.entrySet()) {
-            if(entry.getValue() >= 90 && !dangerCells.contains(entry.getKey()))
-                dangerCells.add(entry.getKey());                
+        for (Map.Entry<Cell, Double> entry : potentialDangerCells.entrySet()) {
+            if(entry.getValue() >= 70 && !contains(dangerCells, entry.getKey())){
+                dangerCells.add(entry.getKey()); 
+            }
         }
+        potentialDangerCells.keySet().removeAll(dangerCells);
     }
     
 //    private void explore() {
@@ -151,7 +228,6 @@ public class Player{
     }
     
     private Direction getDirectionByCell(Cell c){
-        System.out.println("");
         if(currentCell.getCol() == c.getCol() && currentCell.getRow()+1 == c.getRow())
             return Direction.DOWN;
         else if(currentCell.getCol() == c.getCol() && currentCell.getRow()-1 == c.getRow())
@@ -171,6 +247,22 @@ public class Player{
             result.add(getCellByDirection(dir));
         }
         return result;
+    }
+    
+    private boolean contains(HashMap<Cell, Double> list, Cell c){
+        for (Map.Entry<Cell, Double> entry : list.entrySet()) {
+            if(entry.getKey().equals(c))
+                return true;
+        }
+        return false;        
+    }
+    
+    private boolean contains(ArrayList<Cell> list, Cell c){
+        for(Cell cell : list) {
+            if(cell.equals(c))
+                return true;
+        }
+        return false; 
     }
     
     private class Cell{
@@ -193,6 +285,16 @@ public class Player{
         @Override
         public String toString(){
             return "["+this.row+","+this.col+"]";
+        }
+        
+        @Override
+        public boolean equals(Object o){
+            return ((o instanceof Cell) && (((Cell)o).getRow() == this.getRow()) && (((Cell)o).getCol() == this.getCol()));
+        }
+        
+        @Override
+        public int hashCode(){
+            return 1000*col+row;
         }
     }
 }

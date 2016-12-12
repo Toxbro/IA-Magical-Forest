@@ -133,7 +133,7 @@ public class Map {
         }
         
         portalCell = monsterCells.get(0);
-        while ((monsterCells.contains(portalCell)) || (monsterCells.contains(portalCell))) {
+        while ((monsterCells.contains(portalCell)) || (crevasseCells.contains(portalCell))) {
             portalCell = getRandomCell();
         }
         portalCell.setIsShiny(true);
